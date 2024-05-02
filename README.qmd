@@ -1,0 +1,55 @@
+---
+format: gfm
+---
+
+# Rekekssion
+The linear regression package for the lazy:
+
+* create a linear model with `rekekssion.fit()`
+* get all the info you need with the `.summary()` method
+* plot model suppositions and diagnostics with `.plot()`:
+    - **normality**: residual's qq and density plots
+    - **linearity**: observed vs estimated values
+    - **homoscedasticity**: estimated values vs residuals
+    - **autocorrelation**: index vs residuals
+    - **leverage**: estimated values vs hat values
+    - **influence**: estimated values vs cook's distance
+* extract specific info with `.coefficients()`, `.estimated()` `.residuals()` if you're into that
+* evaluate new data with `.predict()`
+
+Comes with 3 datasets inside `rekekssion.data` to play around: `biomass`, `concrete` and `cpu`.
+You can set significance level $\alpha$ of the summary and the kind of residuals (`"response"`, `"standardized"`, `"studentized"`).
+
+
+```{python}
+import rekekssion
+
+model = rekekssion.fit(
+    data = rekekssion.data.concrete,
+    y = "compressive_strength",
+    x = ["cement", "water", "blast_furnace_slag", "fly_ash", "age"],
+    intercept = True,
+)
+
+model.summary()
+```
+
+```{python}
+model.coefficients()
+model.estimated()
+model.residuals()
+
+import pandas
+new_data = pandas.DataFrame({
+    "cement": [250, 250, 250],
+    "water": [150, 150, 150],
+    "blast_furnace_slag": [0, 0, 0],
+    "fly_ash": [100, 100, 100],
+    "age": [15, 30, 60]
+})
+model.predict(new_data)
+```
+
+```{python}
+model.plot()
+```
